@@ -1,0 +1,22 @@
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.15.4
+    container_name: qdrant
+    restart: always
+    ports:
+      - "6399:6333"
+    volumes:
+      - ./data/qdrant_storage:/qdrant/storage
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - bash -c ':> /dev/tcp/127.0.0.1/6333' || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 3
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge

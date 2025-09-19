@@ -1,0 +1,13 @@
+onnxruntime
+opencv-python
+scikit-image
+requests
+tqdm
+torch==1.9.1+cpu 
+torchvision==0.10.1+cpu 
+torchaudio==0.9.1
+PyYAML
+matplotlib
+pandas
+seaborn
+thop
