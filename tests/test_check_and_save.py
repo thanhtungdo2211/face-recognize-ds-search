@@ -46,8 +46,8 @@ class ImagePaths(BaseModel):
 
 # Provide a proper ImagePaths instance (replace id_user and paths as needed)
 image_paths = ImagePaths(
-    id_user="user_2",
-    paths=["/home/mq/disk2T/tungdt/spa/data/test2.jpg"]
+    id_user="user_3",
+    paths=["data/2025-09-17T074325_None.jpg"]
 )
 result = {}
 avatar_path = ""
@@ -95,16 +95,9 @@ for img_path in image_paths.paths:
     
     # Extract feature
     feature = recognizer(face_crop.copy())
-    features.append(feature)
-    print(feature)
     status = check_and_save_feature(feature_vector=feature,
                            user_id=id_user,
                            camera_id=1)
     
     print(status)
     
-# stat = upsert(user_id=id_user,
-#         features=features,
-#         camera_id=1)
-
-# print(stat)

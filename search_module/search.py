@@ -65,13 +65,13 @@ def search(
             raise ValueError(f"Query vector must be 512-dimensional, got {len(query_vector)}")
 
         # Perform search
-        # start = time.time()
+        start = time.time()
         search_results = feature_storage.client.query_points(
             collection_name=feature_storage.collection_name,
             query=query_vector,
-            limit=limit,
-            with_payload=True,
-            with_vectors=False,
+            # limit=limit,
+            # with_payload=True,
+            # with_vectors=False,
         ).points
         # end = time.time()
         # print(f"Search time: {(end-start)*1000:.2f}ms")
@@ -86,7 +86,7 @@ def search(
         #     if result.score > similarity_threshold:  # If ANY result doesn't meet threshold
         #         return False  
         
-        print(f"No similar matches found above threshold {similarity_threshold}")
+        # print(f"No similar matches found above threshold {similarity_threshold}")
         return False
         
     except Exception as e:
@@ -104,7 +104,7 @@ def check_and_save_feature(
         res = search(
             query_vector=feature_vector,
             limit=limit,
-            score_threshold=similarity_threshold,  
+            similarity_threshold=similarity_threshold,  
         )
         
         if not res:
