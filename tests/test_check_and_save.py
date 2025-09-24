@@ -13,7 +13,7 @@ from typing import List
 from uuid import uuid4
 
 from pydantic import BaseModel
-from search_module.search import upsert, search, check_and_save_feature
+from search_module.search import upsert, search
 
 MODEL_YOLO = 1
 MODEL_SCRFD = 2
@@ -95,9 +95,18 @@ for img_path in image_paths.paths:
     
     # Extract feature
     feature = recognizer(face_crop.copy())
-    status = check_and_save_feature(feature_vector=feature,
-                           user_id=id_user,
-                           camera_id=1)
+
+    search_res = search(
+        query_vector=feature
+    )
+    print(search_res)
     
-    print(status)
-    
+    if search_res["result"]:
+        features.append(feature)
+
+print(f"Upsert {len(features)} features")
+res = upsert(user_id=id_user,
+        features=features,
+        camera_id=1)
+
+print(res)

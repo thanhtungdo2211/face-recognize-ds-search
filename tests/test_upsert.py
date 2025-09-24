@@ -46,7 +46,7 @@ class ImagePaths(BaseModel):
 
 # Provide a proper ImagePaths instance (replace id_user and paths as needed)
 image_paths = ImagePaths(
-    id_user="user_1",
+    id_user="user_11",
     paths=["/home/mq/disk2T/tungdt/spa/data/test1.jpg"]
 )
 result = {}

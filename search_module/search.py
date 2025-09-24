@@ -57,7 +57,7 @@ def upsert(
 
 def search(
     query_vector: List[float],  
-    limit: int = 10,
+    limit: int = 100,
     similarity_threshold: float = 1.15
 ) -> Dict[str, Any]:
     try:
@@ -65,52 +65,44 @@ def search(
             raise ValueError(f"Query vector must be 512-dimensional, got {len(query_vector)}")
 
         # Perform search
-        start = time.time()
+        # start = time.time()
         search_results = feature_storage.client.query_points(
             collection_name=feature_storage.collection_name,
             query=query_vector,
-            # limit=limit,
-            # with_payload=True,
-            # with_vectors=False,
+            limit=limit,
+            with_payload=True,
+            with_vectors=False,
         ).points
         # end = time.time()
         # print(f"Search time: {(end-start)*1000:.2f}ms")
         
-        # Check if any result meets the similarity threshold
-        # ANY
-        for result in search_results:
-            if result.score <= similarity_threshold:
-                return True
-        # ALL
-        # for result in search_results:
-        #     if result.score > similarity_threshold:  # If ANY result doesn't meet threshold
-        #         return False  
+        # Check if we have any results
+        if not search_results:
+            return {
+                "result": False,
+                "score": float('inf'),
+                "user_id": None
+            }
         
-        # print(f"No similar matches found above threshold {similarity_threshold}")
-        return False
+        # Find the best match (lowest score for Euclidean distance)
+        best_match = search_results[0]  # Results are already sorted by score
+        best_score = best_match.score
+        best_user_id = best_match.payload.get('user_id')
+        
+        # Check if the best match meets the similarity threshold
+        is_similar = best_score <= similarity_threshold
+        
+        return {
+            "result": is_similar,
+            "score": best_score,
+            "user_id": best_user_id if is_similar else None
+        }
         
     except Exception as e:
         print(f"Search error: {e}")
-        return False
+        return {
+            "result": False,
+            "score": float('inf'),
+            "user_id": None
+        }
     
-def check_and_save_feature(
-    feature_vector: List[float],
-    user_id: str,
-    camera_id: str,
-    limit: int = 10,
-    similarity_threshold: float = 1.15
-) -> Dict[str, Any]:
-    try:
-        res = search(
-            query_vector=feature_vector,
-            limit=limit,
-            similarity_threshold=similarity_threshold,  
-        )
-        
-        if not res:
-            upsert(user_id=user_id,
-                features=[feature_vector],
-                camera_id=camera_id)
-          
-    except Exception as e:
-        return e

@@ -1,18 +1,15 @@
-import uuid
-import numpy as np
-from typing import List, Dict, Any, Optional, Union
-from datetime import datetime
+import os 
+from dotenv import load_dotenv
 
 from qdrant_client import QdrantClient
-from qdrant_client.models import Distance, VectorParams, PointStruct
-from qdrant_client.models import Filter, FieldCondition, MatchValue, Range
-from qdrant_client.http.exceptions import UnexpectedResponse
+from qdrant_client.models import Distance, VectorParams
 
+load_dotenv("./.env")
 # Qdrant configuration
-QDRANT_HOST = '192.168.6.194'
-QDRANT_PORT = 6399
-QDRANT_API_KEY = None
-COLLECTION_NAME = "user_features"
+QDRANT_HOST = os.getenv('QDRANT_HOST', '192.168.6.194')
+QDRANT_PORT = int(os.getenv('QDRANT_PORT', '6399'))
+QDRANT_API_KEY = os.getenv('QDRANT_API_KEY', None)
+COLLECTION_NAME = os.getenv('COLLECTION_NAME', 'user_features')
 
 class QdrantFeatureStorage:
     def __init__(self):

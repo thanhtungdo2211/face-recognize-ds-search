@@ -46,8 +46,8 @@ class ImagePaths(BaseModel):
 
 # Provide a proper ImagePaths instance (replace id_user and paths as needed)
 image_paths = ImagePaths(
-    id_user="user_1",
-    paths=["/home/mq/disk2T/tungdt/spa/data/test1.jpg"]
+    id_user="user_2",
+    paths=["/home/mq/disk2T/tungdt/spa/data/test2.jpg"]
 )
 result = {}
 avatar_path = ""
