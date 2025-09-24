@@ -101,7 +101,7 @@ for img_path in image_paths.paths:
     )
     print(search_res)
     
-    if search_res["result"]:
+    if not search_res["result"]:
         features.append(feature)
 
 print(f"Upsert {len(features)} features")
